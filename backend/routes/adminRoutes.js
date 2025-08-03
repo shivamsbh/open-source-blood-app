@@ -5,6 +5,8 @@ const {
   getHospitalListController,
   getOrgListController,
   deleteUserController,
+  createAdminController,
+  getAdminListController,
 } = require("../controllers/adminController");
 const adminMiddleware = require("../middlewares/adminMiddleware");
 
@@ -29,7 +31,19 @@ router.get(
 );
 //GET || ORG LIST
 router.get("/org-list", authMiddleware, adminMiddleware, getOrgListController);
+
+//GET || ADMIN LIST
+router.get("/admin-list", authMiddleware, adminMiddleware, getAdminListController);
+
 // ==========================
+
+// CREATE ADMIN || POST (Only admins can create other admins)
+router.post(
+  "/create-admin",
+  authMiddleware,
+  adminMiddleware,
+  createAdminController
+);
 
 // DELETE USER || DELETE
 router.delete(

@@ -55,6 +55,11 @@ const Sidebar = () => {
         icon: "fa-solid fa-building",
         label: "Organizations",
       },
+      {
+        path: "/admin-management",
+        icon: "fa-solid fa-user-shield",
+        label: "Manage Admins",
+      },
     ],
     donor: [
       {
