@@ -1,0 +1,10 @@
+<svg width="102" height="120" viewBox="0 0 102 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="bloodGradient" cx="50%" cy="50%" r="50%" fx="50%" fy="30%">
+      <stop offset="0%" stop-color="#FF5B5B"/>
+      <stop offset="100%" stop-color="#C40C0C"/>
+    </radialGradient>
+  </defs>
+  <path d="M51 1C19.3333 29.6667 1.5 60.2 1.5 79C1.5 100.7787 24.3223 119 51 119C77.6777 119 100.5 100.7787 100.5 79C100.5 60.2 82.6667 29.6667 51 1Z" fill="url(#bloodGradient)" stroke="#8B0000" stroke-width="2"/>
+  <path d="M35 76C44.3333 85.3333 61.6 86.4 70 79C61.5 65.5 45.8333 65.8333 35 76Z" fill="white" fill-opacity="0.7"/>
+</svg> 
