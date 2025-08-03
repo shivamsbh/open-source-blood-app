@@ -73,24 +73,27 @@ const Form = ({ formType, submitBtn, formTitle }) => {
               Donor
             </label>
           </div>
-          <div className="form-check">
-            <input
-              type="radio"
-              className="form-check-input"
-              name="role"
-              id="adminRadio"
-              value={"admin"}
-              onChange={(e) => setRole(e.target.value)}
-            />
-            <label htmlFor="adminRadio" className="form-check-label" style={{
-              fontFamily: 'var(--font-secondary)',
-              fontSize: 'var(--text-sm)',
-              fontWeight: '600',
-              color: 'var(--secondary-color)'
-            }}>
-              Admin
-            </label>
-          </div>
+          {/* Admin option only available for login, not registration */}
+          {formType === "login" && (
+            <div className="form-check">
+              <input
+                type="radio"
+                className="form-check-input"
+                name="role"
+                id="adminRadio"
+                value={"admin"}
+                onChange={(e) => setRole(e.target.value)}
+              />
+              <label htmlFor="adminRadio" className="form-check-label" style={{
+                fontFamily: 'var(--font-secondary)',
+                fontSize: 'var(--text-sm)',
+                fontWeight: '600',
+                color: 'var(--secondary-color)'
+              }}>
+                Admin
+              </label>
+            </div>
+          )}
           <div className="form-check">
             <input
               type="radio"

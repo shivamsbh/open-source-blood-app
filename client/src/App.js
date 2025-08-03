@@ -26,6 +26,7 @@ import DonorList from "./pages/Admin/DonorList";
 import HospitalList from "./pages/Admin/HospitalList";
 import OrgList from "./pages/Admin/OrgList";
 import AdminHome from "./pages/Admin/AdminHome";
+import AdminManagement from "./pages/Admin/AdminManagement";
 
 const App = () => {
   return (
@@ -74,6 +75,14 @@ const App = () => {
           element={
             <ProtectedRoute>
               <OrgList />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin-management"
+          element={
+            <ProtectedRoute>
+              <AdminManagement />
             </ProtectedRoute>
           }
         />

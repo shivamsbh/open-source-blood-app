@@ -14,6 +14,14 @@ const registerController = async (req, res) => {
       });
     }
 
+    // SECURITY: Prevent admin registration through public registration
+    if (role === "admin") {
+      return res.status(403).json({
+        success: false,
+        message: "Admin accounts cannot be created through public registration. Contact system administrator.",
+      });
+    }
+
     // Check if user already exists
     const existingUser = await userModel.findOne({ email });
     if (existingUser) {
