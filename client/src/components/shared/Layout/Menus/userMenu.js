@@ -1,8 +1,8 @@
 export const userMenu = [
   {
-    name: "Inventory",
+    name: "Home",
     path: "/",
-    icon: "fa-solid fa-warehouse",
+    icon: "fa-solid fa-house",
   },
   {
     name: "Donor",
