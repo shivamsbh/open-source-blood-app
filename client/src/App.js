@@ -20,6 +20,9 @@ import DonorCapacity from "./pages/Dashboard/DonorCapacity";
 import Hospitals from "./pages/Dashboard/Hospitals";
 import OrganisationPage from "./pages/Dashboard/OrganisationPage";
 import OrganisationSubscription from "./pages/Dashboard/OrganisationSubscription";
+import DonorHome from "./pages/Dashboard/DonorHome";
+import HospitalHome from "./pages/Dashboard/HospitalHome";
+import OrganisationHome from "./pages/Dashboard/OrganisationHome";
 import Consumer from "./pages/Dashboard/Consumer";
 import Donation from "./pages/Donation";
 import NewDonation from "./pages/Dashboard/NewDonation";
@@ -171,6 +174,30 @@ const App = () => {
           element={
             <ProtectedRoute>
               <HomePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/donor-home"
+          element={
+            <ProtectedRoute>
+              <DonorHome />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/hospital-home"
+          element={
+            <ProtectedRoute>
+              <HospitalHome />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/organisation-home"
+          element={
+            <ProtectedRoute>
+              <OrganisationHome />
             </ProtectedRoute>
           }
         />

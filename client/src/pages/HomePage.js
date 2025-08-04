@@ -28,9 +28,21 @@ const HomePage = () => {
   useEffect(() => {
     getBloodRecords();
   }, []);
+
+  useEffect(() => {
+    if (user?.role === "admin") {
+      navigate("/admin");
+    } else if (user?.role === "donor") {
+      navigate("/donor-home");
+    } else if (user?.role === "hospital") {
+      navigate("/hospital-home");
+    } else if (user?.role === "organisation") {
+      navigate("/organisation-home");
+    }
+  }, [user, navigate]);
+
   return (
     <Layout>
-      {user?.role === "admin" && navigate("/admin")}
       {error && <div className="alert alert-danger">{error}</div>}
       {loading ? (
         <Spinner />
