@@ -63,14 +63,24 @@ const Sidebar = () => {
     ],
     donor: [
       {
-        path: "/organisation",
+        path: "/donor-dashboard",
+        icon: "fa-solid fa-tachometer-alt",
+        label: "Dashboard",
+      },
+      {
+        path: "/donor-capacity",
+        icon: "fa-solid fa-heart-pulse",
+        label: "My Capacity",
+      },
+      {
+        path: "/donor-organisation",
         icon: "fa-solid fa-building-ngo",
         label: "Organisations",
       },
       {
-        path: "/donation",
-        icon: "fa-solid fa-hand-holding-heart",
-        label: "My Donations",
+        path: "/donor-new-donation",
+        icon: "fa-solid fa-droplet",
+        label: "New Donation",
       },
     ],
     hospital: [

@@ -14,11 +14,15 @@ import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 
 // Dashboard Pages
-import Donor from "./pages/Dashboard/Donor";
+import DonorListForOrg from "./pages/Dashboard/DonorListForOrg";
+import DonorDashboard from "./pages/Dashboard/DonorDashboard";
+import DonorCapacity from "./pages/Dashboard/DonorCapacity";
 import Hospitals from "./pages/Dashboard/Hospitals";
 import OrganisationPage from "./pages/Dashboard/OrganisationPage";
+import OrganisationSubscription from "./pages/Dashboard/OrganisationSubscription";
 import Consumer from "./pages/Dashboard/Consumer";
 import Donation from "./pages/Donation";
+import NewDonation from "./pages/Dashboard/NewDonation";
 import Analytics from "./pages/Dashboard/Analytics";
 
 // Admin Pages
@@ -113,18 +117,18 @@ const App = () => {
           }
         />
         <Route
-          path="/donation"
+          path="/organisation"
           element={
             <ProtectedRoute>
-              <Donation />
+              <OrganisationSubscription />
             </ProtectedRoute>
           }
         />
         <Route
-          path="/organisation"
+          path="/donor-organisation"
           element={
             <ProtectedRoute>
-              <OrganisationPage />
+              <OrganisationSubscription />
             </ProtectedRoute>
           }
         />
@@ -132,7 +136,31 @@ const App = () => {
           path="/donor"
           element={
             <ProtectedRoute>
-              <Donor />
+              <DonorListForOrg />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/donor-dashboard"
+          element={
+            <ProtectedRoute>
+              <DonorDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/donor-capacity"
+          element={
+            <ProtectedRoute>
+              <DonorCapacity />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/donor-new-donation"
+          element={
+            <ProtectedRoute>
+              <NewDonation />
             </ProtectedRoute>
           }
         />
