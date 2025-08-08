@@ -19,4 +19,24 @@ export const userMenu = [
     path: "/organisation",
     icon: "fa-sharp fa-solid fa-building-ngo",
   },
+  {
+    name: "Analytics",
+    path: "/analytics",
+    icon: "fa-solid fa-chart-line",
+  },
+  {
+    name: "Advanced Analytics",
+    path: "/comprehensive-analytics",
+    icon: "fa-solid fa-chart-area",
+  },
+  {
+    name: "Donor Management",
+    path: "/donor-management",
+    icon: "fa-solid fa-users",
+  },
+  {
+    name: "Hospital Management",
+    path: "/hospital-management",
+    icon: "fa-solid fa-hospital",
+  },
 ];

@@ -56,6 +56,19 @@ const userSchema = new mongoose.Schema(
       trim: true,
       match: [/^\+?[\d\s-()]+$/, "Please enter a valid phone number"],
     },
+    bloodGroup: {
+      type: String,
+      required: function () {
+        return this.role === "donor";
+      },
+      enum: ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"],
+    },
+    dateOfBirth: {
+      type: Date,
+      required: function () {
+        return this.role === "donor";
+      },
+    },
   },
   { 
     timestamps: true,

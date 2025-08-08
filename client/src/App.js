@@ -27,6 +27,9 @@ import Consumer from "./pages/Dashboard/Consumer";
 import Donation from "./pages/Donation";
 import NewDonation from "./pages/Dashboard/NewDonation";
 import Analytics from "./pages/Dashboard/Analytics";
+import ComprehensiveAnalytics from "./pages/Dashboard/ComprehensiveAnalytics";
+import DonorManagement from "./pages/Dashboard/DonorManagement";
+import HospitalManagement from "./pages/Dashboard/HospitalManagement";
 
 // Admin Pages
 import DonorList from "./pages/Admin/DonorList";
@@ -108,6 +111,30 @@ const App = () => {
           element={
             <ProtectedRoute>
               <Analytics />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/comprehensive-analytics"
+          element={
+            <ProtectedRoute>
+              <ComprehensiveAnalytics />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/donor-management"
+          element={
+            <ProtectedRoute>
+              <DonorManagement />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/hospital-management"
+          element={
+            <ProtectedRoute>
+              <HospitalManagement />
             </ProtectedRoute>
           }
         />

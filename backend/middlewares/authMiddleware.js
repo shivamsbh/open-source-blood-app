@@ -27,7 +27,11 @@ module.exports = async (req, res, next) => {
           message: "Auth Failed",
         });
       } else {
+        // Ensure req.body exists for GET requests as well
+        if (!req.body) req.body = {};
         req.body.userId = decoded.userId;
+        // Also attach to req directly for robustness
+        req.userId = decoded.userId;
         next();
       }
     });

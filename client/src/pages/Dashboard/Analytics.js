@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Header from "../../components/shared/Layout/Header";
+import Layout from "../../components/shared/Layout/Layout";
 import API from "./../../services/API";
 import moment from "moment";
 
@@ -51,8 +51,7 @@ const Analytics = () => {
     getBloodRecords();
   }, []);
   return (
-    <>
-      <Header />
+    <Layout>
       <div className="dashboard-container">
         {/* Modern Dashboard Header */}
         <div className="dashboard-header">
@@ -220,7 +219,7 @@ const Analytics = () => {
           </table>
         </div>
       </div>
-    </>
+    </Layout>
   );
 };
 

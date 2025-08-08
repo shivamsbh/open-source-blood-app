@@ -28,11 +28,6 @@ const Sidebar = () => {
         icon: "fa-solid fa-hospital",
         label: "Hospitals",
       },
-      {
-        path: "/analytics",
-        icon: "fa-solid fa-chart-line",
-        label: "Analytics",
-      },
     ],
     admin: [
       {
