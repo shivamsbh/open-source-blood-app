@@ -147,7 +147,7 @@ const loginController = async (req, res) => {
     if (normalizedUserRole !== normalizedLoginRole) {
       return res.status(401).json({
         success: false,
-        message: "Role doesn't match",
+        message: "Invalid credentials",
       });
     }
 

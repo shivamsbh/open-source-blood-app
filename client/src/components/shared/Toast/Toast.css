@@ -150,6 +150,30 @@
   background: var(--gradient-info);
 }
 
+/* Enhanced Authentication Error Styles */
+.toast-auth-error {
+  border-left: 6px solid #dc2626;
+  background: linear-gradient(135deg, rgba(254, 242, 242, 0.95) 0%, rgba(254, 226, 226, 0.95) 100%);
+  box-shadow: 0 20px 40px rgba(220, 38, 38, 0.15), 0 0 0 1px rgba(220, 38, 38, 0.1);
+  animation: authErrorShake 0.6s ease-in-out;
+}
+
+.toast-auth-error .toast-icon {
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+  color: white;
+  animation: authErrorPulse 1.5s infinite;
+}
+
+.toast-auth-error .toast-message {
+  font-weight: 600;
+  color: #7f1d1d;
+  font-size: var(--text-sm);
+}
+
+.toast-auth-error .toast-progress-bar {
+  background: linear-gradient(90deg, #dc2626, #b91c1c);
+}
+
 /* Animations */
 @keyframes slideInRight {
   from {
@@ -170,6 +194,40 @@
   to {
     transform: translateX(100%);
     opacity: 0;
+  }
+}
+
+@keyframes authErrorShake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-8px); }
+  20%, 40%, 60%, 80% { transform: translateX(8px); }
+}
+
+@keyframes authErrorPulse {
+  0%, 100% { 
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.4);
+  }
+  50% { 
+    transform: scale(1.05);
+    box-shadow: 0 0 0 8px rgba(220, 38, 38, 0);
+  }
+}
+
+@keyframes bounceIn {
+  0% {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
   }
 }
 

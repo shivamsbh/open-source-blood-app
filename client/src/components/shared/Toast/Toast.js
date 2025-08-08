@@ -33,6 +33,8 @@ const Toast = ({ id, message, type, duration, onClose }) => {
         return <i className="fa-solid fa-check-circle"></i>;
       case 'error':
         return <i className="fa-solid fa-times-circle"></i>;
+      case 'auth-error':
+        return <i className="fa-solid fa-shield-exclamation"></i>;
       case 'warning':
         return <i className="fa-solid fa-exclamation-triangle"></i>;
       default:

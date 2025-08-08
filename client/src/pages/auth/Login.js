@@ -1,20 +1,20 @@
 import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import Form from "../../components/shared/Form/Form";
 import SexyLoader from "../../components/shared/SexyLoader/SexyLoader";
-import { useToast } from "../../components/shared/Toast/ToastManager";
+import authSlice from "../../redux/features/auth/authSlice";
 
 const Login = () => {
   const { loading, error } = useSelector((state) => state.auth);
-  const toast = useToast();
+  const dispatch = useDispatch();
 
-  // Handle error display with toast instead of alert
   useEffect(() => {
     if (error) {
       toast.error(error);
+      dispatch(authSlice.actions.clearError());
     }
-  }, [error, toast]);
+  }, [error]);
 
   if (loading) {
     return <SexyLoader message="Signing you in..." />;
