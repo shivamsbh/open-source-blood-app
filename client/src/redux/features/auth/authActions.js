@@ -15,7 +15,7 @@ export const userLogin = createAsyncThunk(
       }
       return data;
     } catch (error) {
-      if (error.response && error.response.data.message) {
+      if (error.response && error.response.data) {
         return rejectWithValue(error.response.data.message);
       } else {
         return rejectWithValue(error.message);
@@ -59,7 +59,7 @@ export const userRegister = createAsyncThunk(
       }
     } catch (error) {
       console.log(error);
-      if (error.response && error.response.data.message) {
+      if (error.response && error.response.data) {
         return rejectWithValue(error.response.data.message);
       } else {
         return rejectWithValue(error.message);
@@ -79,7 +79,7 @@ export const getCurrentUser = createAsyncThunk(
       }
     } catch (error) {
       console.log(error);
-      if (error.response && error.response.data.message) {
+      if (error.response && error.response.data) {
         return rejectWithValue(error.response.data.message);
       } else {
         return rejectWithValue(error.message);

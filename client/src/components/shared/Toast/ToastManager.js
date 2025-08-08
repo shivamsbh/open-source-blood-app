@@ -36,11 +36,12 @@ export const ToastProvider = ({ children }) => {
 
   const success = useCallback((message, duration) => addToast(message, 'success', duration), [addToast]);
   const error = useCallback((message, duration) => addToast(message, 'error', duration), [addToast]);
+  const authError = useCallback((message, duration = 5000) => addToast(message, 'auth-error', duration), [addToast]);
   const warning = useCallback((message, duration) => addToast(message, 'warning', duration), [addToast]);
   const info = useCallback((message, duration) => addToast(message, 'info', duration), [addToast]);
 
   return (
-    <ToastContext.Provider value={{ success, error, warning, info, removeToast }}>
+    <ToastContext.Provider value={{ success, error, authError, warning, info, removeToast }}>
       {children}
       <div className="toast-container">
         {toasts.map(toast => (
