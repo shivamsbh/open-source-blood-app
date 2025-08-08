@@ -1,249 +1,223 @@
-# 🩸 Blood Bank Management System
+# Blood Bank Management System (MERN)
 
-A comprehensive MERN (MongoDB, Express.js, React.js, Node.js) stack application for managing blood bank operations, connecting donors, hospitals, and organizations in an efficient blood donation ecosystem.
+A full‑stack application to manage blood bank operations connecting Donors, Hospitals, and Organisations with Admin oversight. Built with MongoDB, Express, React, and Node.
 
-## 🌟 Features
+## Contents
+- Overview
+- Architecture & Tech
+- Environment & Setup
+- Running (Dev/Prod) and Seeding
+- Data Model & Relationships
+- Role‑based End‑to‑End Flows
+- REST API Overview (key endpoints)
+- Frontend Structure & Navigation
+- Security & Best Practices
+- Troubleshooting
+- Contributing / License
 
-### 🔐 Multi-Role Authentication System
-- **Admin**: Complete system oversight and user management
-- **Organization**: Blood inventory management and coordination
-- **Donor**: Blood donation tracking and history
-- **Hospital**: Blood request and consumption management
+## Overview
+This system enables:
+- Organisations to manage inventory, connect with donors and hospitals, and track flows.
+- Donors to subscribe to organisations and view their capacity/donation info.
+- Hospitals to discover organisations, subscribe to them, and receive inventory.
+- Admins to manage users and audit system data.
 
-### 🚀 Live Demo
-- **Demo URL**: [Coming Soon - Blood Bank System](https://your-demo-url.com)
-- **Test Credentials**: Contact admin for demo access
-- **Features Showcase**: Interactive demo with sample data
+## Architecture & Tech
+- Frontend: React 18, React Router 6, Redux Toolkit, Axios, Moment
+- Backend: Node, Express, Mongoose, JWT, bcryptjs, CORS, Morgan
+- Database: MongoDB (Mongoose ODM)
+- Auth: JWT in Authorization: Bearer <token>
 
-### 📱 Mobile Compatibility
-- **Responsive Design**: Works seamlessly on all devices
-- **Touch Optimized**: Mobile-friendly interface
-- **Offline Support**: PWA capabilities for offline access
-- **Cross-Platform**: Compatible with iOS, Android, and desktop browsers
-
-### 📊 Core Functionalities
-- **Blood Inventory Management**: Track blood donations and distributions
-- **Real-time Analytics**: Monitor blood bank statistics and trends
-- **User Management**: Role-based access control and user profiles
-- **Blood Request System**: Hospitals can request specific blood types
-- **Donation Tracking**: Complete history of donations and distributions
-- **Responsive Design**: Mobile-friendly interface
-
-### 🩸 Blood Type Support
-- All major blood groups: O+, O-, AB+, AB-, A+, A-, B+, B-
-- Quantity tracking in milliliters (ML)
-- Inventory type classification (In/Out)
-
-## 🚀 Quick Start
-
-### Prerequisites
-- Node.js (v14 or higher)
-- MongoDB (local or cloud instance)
-- npm or yarn package manager
-
-### Installation
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/shivamsbh/BLOOD-BANK-PROJECT.git
-   cd BLOOD-BANK-PROJECT
-   ```
-
-2. **Install dependencies**
-   ```bash
-   # Install backend dependencies
-   cd backend
-   npm install
-   
-   # Install frontend dependencies
-   cd ../client
-   npm install
-   ```
-
-3. **Environment Setup**
-   
-   **Backend (.env in backend folder):**
-   ```env
-   PORT=8080
-   DEV_MODE=development
-   MONGO_URL=mongodb://localhost:27017/bloodbank
-   JWT_SECRET=your_jwt_secret_key
-   ```
-   
-   **Frontend (.env in client folder):**
-   ```env
-   REACT_APP_BASEURL=http://localhost:8080/api/v1
-   ```
-
-4. **Start the application**
-   ```bash
-   # From the backend directory
-   npm run dev
-   ```
-   This will start both backend and frontend servers concurrently.
-
-## 🏗️ Project Structure
-
+Directory layout
 ```
-BLOOD-BANK-PROJECT/
-├── backend/                 # Node.js/Express.js API
-│   ├── config/             # Database configuration
-│   ├── controllers/        # Route controllers
-│   ├── middlewares/        # Authentication & admin middlewares
-│   ├── models/            # MongoDB schemas
-│   ├── routes/            # API routes
-│   └── server.js          # Entry point
-├── client/                 # React.js frontend
-│   ├── public/            # Static assets
-│   ├── src/               # React components and pages
-│   └── package.json       # Frontend dependencies
-└── README.md              # Project documentation
+.
+├── backend/
+│   ├── config/              # Mongo connection (db.js)
+│   ├── controllers/         # Business logic for routes
+│   ├── middlewares/         # authMiddleware, role middlewares
+│   ├── models/              # Mongoose schemas
+│   ├── routes/              # Express routers
+│   ├── seeders/             # seed.js (unified seeder) + README
+│   └── server.js            # Express app entry
+└── client/
+    ├── public/
+    └── src/                 # Components, pages, redux, services
 ```
 
-## 🔧 Technology Stack
+## Environment & Setup
+Create .env files.
 
-### Backend
-- **Node.js**: Runtime environment
-- **Express.js**: Web framework
-- **MongoDB**: NoSQL database
-- **Mongoose**: ODM for MongoDB
-- **JWT**: Authentication tokens
-- **bcryptjs**: Password hashing
-- **CORS**: Cross-origin resource sharing
+Backend (.env in backend/):
+```
+PORT=8080
+DEV_MODE=development
+MONGO_URL=mongodb://localhost:27017/lifeflow
+JWT_SECRET=your_jwt_secret_key
+```
 
-### Frontend
-- **React.js**: UI library
-- **Redux Toolkit**: State management
-- **React Router**: Navigation
-- **Axios**: HTTP client
-- **Bootstrap**: CSS framework
-- **React Icons**: Icon library
-- **Moment.js**: Date formatting
+Frontend (.env in client/):
+```
+REACT_APP_BASEURL=http://localhost:8080/api/v1
+```
 
-## 📱 Application Flow
+Install dependencies:
+```
+cd backend && npm install
+cd ../client && npm install
+```
 
-### User Registration & Authentication
-1. Users register with role selection (Admin/Organization/Donor/Hospital)
-2. JWT-based authentication system
-3. Role-based route protection
+## Running and Seeding
+Dev (runs server + client concurrently from backend):
+```
+cd backend
+npm run dev
+```
 
-### Blood Donation Process
-1. **Donors** register and provide personal information
-2. **Organizations** record blood donations with quantity and blood type
-3. **Inventory** is updated in real-time
+Seed database (clears all and inserts comprehensive dummy data):
+```
+cd backend
+npm run seed   # also available as seed:all / seed:clear
+```
+Seeder: backend/seeders/seed.js
+- Clears collections: users, subscriptions, donations, donorcapacities, inventories
+- Inserts:
+  - 10 admins: admin1@bloodbank.com … admin10@bloodbank.com
+  - 10 donors (named, with blood groups)
+  - 10 hospitals
+  - 10 organisations: org1@bloodbank.org … org10@bloodbank.org
+  - Donor capacities (1 per donor)
+  - Subscriptions (donors↔organisations, hospitals→organisations, organisations→hospitals)
+  - Donations (1–3 per donor subscription)
+  - Inventory: 50 inbound (in), 30 outbound (out)
+- Password for ALL users: 1password2
 
-### Blood Distribution
-1. **Hospitals** request blood from organizations
-2. **Organizations** fulfill requests and update inventory
-3. **Analytics** track distribution patterns
+## Data Model & Relationships
+Models (backend/models):
+- User: { role: admin|organisation|donor|hospital, name|organisationName|hospitalName, email, password, address, phone, website?, bloodGroup?, dateOfBirth? }
+- Inventory: { inventoryType: in|out, bloodGroup, quantity, email, organisation, donor?, hospital?, createdAt }
+- Subscription: { donor, organisation, status, subscribedAt, notificationPreferences? }
+  - Design note: we reuse the same schema to represent different directions:
+    - donor(userId: donor) → organisation(userId: organisation)
+    - hospital(userId: hospital) → organisation(userId: organisation)
+    - organisation(userId: organisation) → hospital(userId: hospital)
+- Donation: { donor, organisation, subscription, bloodGroup, quantity, donationType, donationDate, status, notes, screening }
+- DonorCapacity: { donor, bloodGroup, totalCapacity, availableCapacity, lastDonationDate, nextEligibleDate, donationFrequency, isActive, healthStatus, restrictions, notes }
 
-## 🔑 API Endpoints
+Relationships:
+- User(donor) —1:1→ DonorCapacity
+- User(donor|hospital|organisation) —N:1→ Subscription —1:N→ User(organisation|hospital)
+- Donation references: donor + organisation + subscription
+- Inventory in: donor → organisation; Inventory out: organisation → hospital
 
-### Authentication
-- `POST /api/v1/auth/register` - User registration
-- `POST /api/v1/auth/login` - User login
-- `GET /api/v1/auth/current-user` - Get current user
+## Role‑based End‑to‑End Flows
 
-### Inventory Management
-- `POST /api/v1/inventory/create-inventory` - Add blood record
-- `GET /api/v1/inventory/get-inventory` - Get all blood records
-- `GET /api/v1/inventory/get-recent-inventory` - Get recent records
+Donor
+- Register/Login → Auth token issued
+- Subscribe to organisations:
+  - GET /subscription/available-organisations
+  - POST /subscription/subscribe { organisationId }
+  - GET /subscription/my-subscriptions
+  - POST /subscription/unsubscribe { organisationId }
+- View capacity and history (DonorCapacity, Donations)
 
-### User Management
-- `GET /api/v1/inventory/get-donors` - Get all donors
-- `GET /api/v1/inventory/get-hospitals` - Get all hospitals
-- `GET /api/v1/inventory/get-organisation` - Get all organizations
+Hospital
+- Register/Login
+- Discover organisations and subscriptions:
+  - GET /inventory/get-organisation-for-hospital
+    - Returns organisations from: inventory links, hospital→org subscriptions, org→hospital subscriptions; falls back to all organisations if none
+  - GET /subscription/available-organisations (now role‑aware; works for hospitals too)
+  - POST /subscription/subscribe { organisationId }
+  - GET /subscription/my-subscriptions (returns orgs a hospital is subscribed to)
+- Receive inventory (out transactions are created by an organisation to a hospital)
 
-### Analytics
-- `GET /api/v1/analytics/bloodGroups-data` - Blood group analytics
+Organisation
+- Register/Login
+- Inventory management:
+  - POST /inventory/create-inventory (in: from donor, out: to hospital)
+  - GET /inventory/get-inventory, /get-filtered-inventory, /get-recent-inventory
+- Network management:
+  - Donors: GET /inventory/get-donors
+  - Hospitals: GET /inventory/get-hospitals (union of inventory links, org→hospital subs, hospital→org subs; fallback to all hospitals)
+  - Subscribers:
+    - GET /subscription/my-subscribers (donors subscribed to this organisation)
+    - GET /subscription/hospital-subscribers (hospitals subscribed to this organisation)
+  - Organisation→Hospital subscriptions:
+    - GET /subscription/available-hospitals
+    - POST /subscription/subscribe-hospital { hospitalId }
+    - GET /subscription/my-hospital-subscriptions
+    - POST /subscription/unsubscribe-hospital { hospitalId }
 
-### Admin
-- `GET /api/v1/admin/donor-list` - Admin donor management
-- `GET /api/v1/admin/hospital-list` - Admin hospital management
-- `GET /api/v1/admin/org-list` - Admin organization management
+Admin
+- View and manage lists:
+  - Donors: /admin/donor-list
+  - Hospitals: /admin/hospital-list
+  - Organisations: /admin/org-list
 
-## 🛡️ Security Features
+## REST API Overview (Key Endpoints)
+Base URL: http://localhost:8080/api/v1
+All protected routes require Authorization: Bearer <JWT>.
 
-- **JWT Authentication**: Secure token-based authentication
-- **Password Hashing**: bcryptjs for secure password storage
-- **Role-based Access Control**: Different permissions for each user type
-- **Input Validation**: Mongoose schema validation
-- **CORS Protection**: Configured cross-origin resource sharing
+Auth
+- POST /auth/register
+- POST /auth/login
+- GET  /auth/current-user
 
-## 🎨 User Interface
+Inventory
+- POST /inventory/create-inventory
+- GET  /inventory/get-inventory (org)
+- GET  /inventory/get-filtered-inventory (org)
+- GET  /inventory/get-recent-inventory (org)
+- GET  /inventory/get-donors (org)
+- GET  /inventory/get-hospitals (org; union + fallback)
+- GET  /inventory/get-organisation (donor; from inventory)
+- GET  /inventory/get-organisation-for-hospital (hospital; union + fallback)
 
-- **Responsive Design**: Works on desktop, tablet, and mobile
-- **Intuitive Navigation**: Role-based sidebar menus
-- **Real-time Updates**: Live inventory and analytics
-- **Toast Notifications**: User feedback for actions
-- **Modal Forms**: Clean data entry interfaces
+Subscriptions (Donor/Hospital → Organisation)
+- POST /subscription/subscribe { organisationId }
+- POST /subscription/unsubscribe { organisationId }
+- GET  /subscription/my-subscriptions
+- GET  /subscription/available-organisations
+- GET  /subscription/my-subscribers (org, donors)
+- GET  /subscription/hospital-subscribers (org, hospitals)
+- GET  /subscription/check-status?organisationId=...
 
-## 📊 Analytics & Reporting
+Org → Hospital Subscriptions
+- GET  /subscription/available-hospitals
+- POST /subscription/subscribe-hospital { hospitalId }
+- POST /subscription/unsubscribe-hospital { hospitalId }
+- GET  /subscription/my-hospital-subscriptions
+- GET  /subscription/organisation-subscribers (hospital; orgs subscribed to it)
 
-- Blood group distribution charts
-- Donation trends over time
-- Hospital consumption patterns
-- Donor activity tracking
-- Inventory level monitoring
+Donor Capacity & Donations
+- Capacity: routes under /capacity (see backend)
+- Donations: routes under /donation (create/list/query donations)
 
-## 🤝 Contributing
+## Frontend Structure & Navigation
+Key pages:
+- HomePage (role‑aware quick links)
+- OrganisationHome / HospitalHome / DonorHome / AdminHome
+- OrganisationSubscription: unified UI for managing subscriptions to organisations (works for donors and hospitals)
+- OrganisationPage: for hospitals/donors to view organisations connected to them
+- Hospitals: organisations can view hospitals connected/subscribable
+- Inventory views: list, filtered, recent
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+Set REACT_APP_BASEURL to point to backend’s /api/v1.
 
-## 📄 License
+## Security & Best Practices
+- JWT stored client‑side; sent via Authorization header.
+- Passwords hashed with bcryptjs.
+- Role guards on routes where applicable (via middlewares and frontend checks).
+- Mongoose validation for schema integrity.
 
-This project is licensed under the ISC License.
+## Troubleshooting
+- Available organisations empty (for hospitals):
+  - Ensure you’re logged in (valid JWT present) and that OrganisationSubscription page is accessible to hospitals (it now loads for any authenticated user).
+  - Check Network tab for GET /subscription/available-organisations; response should be success:true with organisations array.
+  - Verify REACT_APP_BASEURL and backend is running.
+- Hospitals page empty: GET /inventory/get-hospitals now returns union of relationships with fallback to all hospitals; if still empty, verify seed ran and check server logs.
+- Auth 401: ensure JWT_SECRET set in backend .env and client is sending Authorization header.
 
-## 👨‍💻 Author
+## Contributing / License
+PRs welcome. Licensed under ISC.
 
-- GitHub: [@shivamsbh](https://github.com/shivamsbh)
-- LinkedIn: [Connect with the developer](https://www.linkedin.com/in/shivam-saurabh-b5bb22279/)
-- Email: [Contact for collaboration](mailto:rasitak195@gmail.com)
-
-## 🌟 Acknowledgments
-
-- Thanks to all blood donors who inspire this project
-- Healthcare workers who save lives daily
-- Open source community for amazing tools and libraries
-- Beta testers and early adopters for valuable feedback
-
-## 🆘 Support
-
-If you encounter any issues or have questions:
-1. Check the existing issues on GitHub
-2. Create a new issue with detailed description
-3. Provide steps to reproduce the problem
-
-## 🔮 Future Enhancements
-
-### Phase 1 - Immediate Improvements
-- [ ] Email notifications for low inventory
-- [ ] SMS alerts for urgent blood requests
-- [ ] Advanced search and filtering
-- [ ] Export data to PDF/Excel
-
-### Phase 2 - Advanced Features
-- [ ] Mobile app development (React Native)
-- [ ] Advanced analytics dashboard with charts
-- [ ] Integration with hospital management systems
-- [ ] Real-time chat support
-
-### Phase 3 - AI & Automation
-- [ ] Geolocation-based donor matching
-- [ ] AI-powered demand prediction
-- [ ] Automated inventory alerts
-- [ ] Smart donor scheduling
-
-### Phase 4 - Extended Ecosystem
-- [ ] Blood camp management
-- [ ] Donor health tracking
-- [ ] Integration with government health systems
-- [ ] Multi-language support
-
----
-
-**Made with ❤️ for saving lives through technology**
+Made with care to help save lives.

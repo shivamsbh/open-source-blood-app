@@ -81,9 +81,9 @@ const Header = () => {
                 </span>
               </div>
             </li>
-            {location.pathname === "/" ||
+            {(user?.role !== 'organisation') && (location.pathname === "/" ||
             location.pathname === "/donor" ||
-            location.pathname === "/hospital" ? (
+            location.pathname === "/hospital") ? (
               <li className="nav-item mx-3">
                 <Link to="/analytics" className="nav-link" style={{ 
                   display: 'flex', 

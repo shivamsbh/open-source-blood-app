@@ -8,8 +8,9 @@
     "server": "nodemon server.js",
     "client": "npm start --prefix ./client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "seed:organizations": "node seeders/organizationSeeder.js",
-    "seed:all": "node seeders/organizationSeeder.js"
+    "seed": "node seeders/seed.js",
+    "seed:all": "node seeders/seed.js",
+    "seed:clear": "node seeders/seed.js"
   },
   "author": "sbhshivam",
   "license": "ISC",

@@ -83,7 +83,8 @@ const OrganisationSubscription = () => {
   };
 
   useEffect(() => {
-    if (user?.role === "donor") {
+    if (user) {
+      // Support both donors and hospitals as subscribers
       getSubscriptions();
       getAvailableOrganisations();
     }

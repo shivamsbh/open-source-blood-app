@@ -30,14 +30,17 @@ const HomePage = () => {
   }, []);
 
   useEffect(() => {
-    if (user?.role === "admin") {
-      navigate("/admin");
-    } else if (user?.role === "donor") {
-      navigate("/donor-home");
-    } else if (user?.role === "hospital") {
-      navigate("/hospital-home");
-    } else if (user?.role === "organisation") {
-      navigate("/organisation-home");
+    // Only redirect if user data is loaded and role is defined
+    if (user && user.role) {
+      if (user.role === "admin") {
+        navigate("/admin");
+      } else if (user.role === "donor" || user.role === "donar") { // Handle both spellings
+        navigate("/donor-home");
+      } else if (user.role === "hospital") {
+        navigate("/hospital-home");
+      } else if (user.role === "organisation") {
+        navigate("/organisation-home");
+      }
     }
   }, [user, navigate]);
 

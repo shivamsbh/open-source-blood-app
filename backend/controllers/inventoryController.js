@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const inventoryModel = require("../models/inventoryModel");
 const userModel = require("../models/userModel");
+const subscriptionModel = require("../models/subscriptionModel");
 
 // CREATE INVENTORY
 const createInventoryController = async (req, res) => {
@@ -114,6 +115,64 @@ const getInventoryController = async (req, res) => {
     });
   }
 };
+
+// GET FILTERED BLOOD RECORDS
+const getFilteredInventoryController = async (req, res) => {
+  try {
+    const { bloodGroup, inventoryType, email, startDate, endDate } = req.query;
+    
+    // Build filter object
+    const filters = {
+      organisation: req.body.userId,
+    };
+
+    // Add blood group filter
+    if (bloodGroup && bloodGroup !== "All Blood Groups") {
+      filters.bloodGroup = bloodGroup;
+    }
+
+    // Add inventory type filter
+    if (inventoryType && inventoryType !== "All Types") {
+      filters.inventoryType = inventoryType;
+    }
+
+    // Add email filter (partial match)
+    if (email) {
+      filters.email = { $regex: email, $options: "i" };
+    }
+
+    // Add date range filter
+    if (startDate || endDate) {
+      filters.createdAt = {};
+      if (startDate) {
+        filters.createdAt.$gte = new Date(startDate);
+      }
+      if (endDate) {
+        filters.createdAt.$lte = new Date(endDate);
+      }
+    }
+
+    const inventory = await inventoryModel
+      .find(filters)
+      .populate("donor")
+      .populate("hospital")
+      .sort({ createdAt: -1 });
+
+    return res.status(200).send({
+      success: true,
+      message: "Filtered records retrieved successfully",
+      inventory,
+      filters: req.query, // Return applied filters for frontend reference
+    });
+  } catch (error) {
+    console.error("Error in get filtered inventory:", error);
+    return res.status(500).send({
+      success: false,
+      message: "Error In Get Filtered Inventory",
+      error: error.message,
+    });
+  }
+};
 // GET Hospital BLOOD RECORS
 const getInventoryHospitalController = async (req, res) => {
   try {
@@ -191,18 +250,59 @@ const getDonorsController = async (req, res) => {
 const getHospitalController = async (req, res) => {
   try {
     const organisation = req.body.userId;
-    //GET HOSPITAL ID
-    const hospitalId = await inventoryModel.distinct("hospital", {
+
+    // 1) Hospitals linked via inventory transactions with this organisation
+    const invHospitalIds = await inventoryModel.distinct("hospital", { organisation });
+
+    // 2) Hospitals that this organisation has subscribed to (org -> hospital)
+    const orgSubToHospIds = await subscriptionModel.distinct("organisation", {
+      donor: organisation,
+      status: "active",
+    });
+    // Ensure they are actually hospitals
+    const orgSubToHospitals = await userModel.find({
+      _id: { $in: orgSubToHospIds },
+      role: "hospital",
+    }).select("_id");
+    const orgSubToHospitalsIds = orgSubToHospitals.map(h => h._id);
+
+    // 3) Hospitals that have subscribed to this organisation (hospital -> org)
+    const hospSubToOrgIds = await subscriptionModel.distinct("donor", {
       organisation,
+      status: "active",
     });
-    //FIND HOSPITAL
-    const hospitals = await userModel.find({
-      _id: { $in: hospitalId },
-    });
+    const hospitalSubscribers = await userModel.find({
+      _id: { $in: hospSubToOrgIds },
+      role: "hospital",
+    }).select("_id");
+    const hospitalSubscriberIds = hospitalSubscribers.map(h => h._id);
+
+    // Union of all sources
+    const allIdStrings = new Set([
+      ...invHospitalIds.map(id => id?.toString()),
+      ...orgSubToHospitalsIds.map(id => id?.toString()),
+      ...hospitalSubscriberIds.map(id => id?.toString()),
+    ].filter(Boolean));
+
+    let hospitals = [];
+    if (allIdStrings.size > 0) {
+      const uniqueIds = Array.from(allIdStrings).map(id => new mongoose.Types.ObjectId(id));
+      hospitals = await userModel.find({ _id: { $in: uniqueIds } });
+    } else {
+      // Fallback: show all hospitals for discovery if no relationship exists yet
+      hospitals = await userModel.find({ role: "hospital" });
+    }
+
     return res.status(200).send({
       success: true,
       message: "Hospitals Data Fetched Successfully",
       hospitals,
+      counts: {
+        fromInventory: invHospitalIds.length,
+        organisationSubscribed: orgSubToHospitalsIds.length,
+        hospitalSubscribed: hospitalSubscriberIds.length,
+        total: hospitals.length,
+      }
     });
   } catch (error) {
     console.log(error);
@@ -241,15 +341,54 @@ const getOrganisationController = async (req, res) => {
 const getOrganisationForHospitalController = async (req, res) => {
   try {
     const hospital = req.body.userId;
-    const orgId = await inventoryModel.distinct("organisation", { hospital });
-    //find org
-    const organisations = await userModel.find({
-      _id: { $in: orgId },
+
+    // 1) Organisations linked via inventory transactions
+    const invOrgIds = await inventoryModel.distinct("organisation", { hospital });
+
+    // 2) Organisations the hospital subscribed to (subscriptions store subscriber in donor field)
+    const hosSubToOrgIds = await subscriptionModel.distinct("organisation", {
+      donor: hospital,
+      status: "active",
     });
+
+    // 3) Organisations that subscribed to this hospital (reverse direction)
+    const orgSubscriberIds = await subscriptionModel.distinct("donor", {
+      organisation: hospital,
+      status: "active",
+    });
+    // Filter those donor ids to only organisations
+    const orgSubscribers = await userModel.find({
+      _id: { $in: orgSubscriberIds },
+      role: "organisation",
+    }).select("_id");
+    const orgSubscriberOrgIds = orgSubscribers.map(o => o._id);
+
+    // Union of all sources
+    const allIdStrings = new Set([
+      ...invOrgIds.map((id) => id.toString()),
+      ...hosSubToOrgIds.map((id) => id.toString()),
+      ...orgSubscriberOrgIds.map((id) => id.toString()),
+    ]);
+    let uniqueIds = Array.from(allIdStrings).map((id) => new mongoose.Types.ObjectId(id));
+
+    let organisations = [];
+    if (uniqueIds.length > 0) {
+      organisations = await userModel.find({ _id: { $in: uniqueIds } });
+    } else {
+      // Fallback: show all organisations so hospital can discover/connect
+      organisations = await userModel.find({ role: "organisation" });
+    }
+
     return res.status(200).send({
       success: true,
       message: "Hospital Org Data Fetched Successfully",
       organisations,
+      counts: {
+        fromInventory: invOrgIds.length,
+        hospitalSubscribed: hosSubToOrgIds.length,
+        orgSubscribedToHospital: orgSubscriberOrgIds.length,
+        unique: uniqueIds.length,
+      },
     });
   } catch (error) {
     console.log(error);
@@ -264,6 +403,7 @@ const getOrganisationForHospitalController = async (req, res) => {
 module.exports = {
   createInventoryController,
   getInventoryController,
+  getFilteredInventoryController,
   getDonorsController,
   getHospitalController,
   getOrganisationController,

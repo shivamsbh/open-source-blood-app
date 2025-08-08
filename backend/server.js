@@ -27,6 +27,7 @@ app.use("/api/v1/analytics", require("./routes/analyticsRoutes"));
 app.use("/api/v1/admin", require("./routes/adminRoutes"));
 app.use("/api/v1/subscription", require("./routes/subscriptionRoutes"));
 app.use("/api/v1/capacity", require("./routes/donorCapacityRoutes"));
+app.use("/api/v1/donation", require("./routes/donationRoutes"));
 
 //port
 const PORT = process.env.PORT || 8080;

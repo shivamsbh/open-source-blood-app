@@ -3,6 +3,7 @@ const authMiddleware = require("../middlewares/authMiddleware");
 const {
   createInventoryController,
   getInventoryController,
+  getFilteredInventoryController,
   getDonorsController,
   getHospitalController,
   getOrganisationController,
@@ -19,6 +20,8 @@ router.post("/create-inventory", authMiddleware, createInventoryController);
 
 //GET ALL BLOOD RECORDS
 router.get("/get-inventory", authMiddleware, getInventoryController);
+//GET FILTERED BLOOD RECORDS
+router.get("/get-filtered-inventory", authMiddleware, getFilteredInventoryController);
 //GET RECENT BLOOD RECORDS
 router.get(
   "/get-recent-inventory",
