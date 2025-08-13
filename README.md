@@ -47,7 +47,7 @@ Directory layout
 ## Environment & Setup
 Create .env files.
 
-Backend (.env in backend/):
+### Backend (.env in backend/):
 ```
 PORT=8080
 DEV_MODE=development
@@ -55,16 +55,24 @@ MONGO_URL=mongodb://localhost:27017/lifeflow
 JWT_SECRET=your_jwt_secret_key
 ```
 
-Frontend (.env in client/):
+### Frontend (.env in client/):
 ```
 REACT_APP_BASEURL=http://localhost:8080/api/v1
 ```
 
-Install dependencies:
+### Install dependencies:
 ```
 cd backend && npm install
 cd ../client && npm install
 ```
+
+### Docker-compose setup (optional):
+1. Adjust `docker-compose.yml` secrets for JWT_SECRET and MONGO user and password.
+2. Run in the root directory:
+   ```
+   docker-compose up -d
+   ```
+3. Access the app at http://localhost:3000.
 
 ## Running and Seeding
 Dev (runs server + client concurrently from backend):
