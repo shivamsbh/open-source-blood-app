@@ -217,7 +217,5 @@ Set REACT_APP_BASEURL to point to backend’s /api/v1.
 - Hospitals page empty: GET /inventory/get-hospitals now returns union of relationships with fallback to all hospitals; if still empty, verify seed ran and check server logs.
 - Auth 401: ensure JWT_SECRET set in backend .env and client is sending Authorization header.
 
-## Contributing / License
-PRs welcome. Licensed under ISC.
 
 Made with care to help save lives.
