@@ -16,28 +16,36 @@ const app = express();
 //middlewares
 app.use(express.json());
 
-// CORS configuration for production
+// CORS configuration
 const corsOptions = {
   origin: function (origin, callback) {
-    // Allow requests with no origin (mobile apps, curl, etc.)
+    // Allow requests with no origin (mobile apps, curl, postman, etc.)
     if (!origin) return callback(null, true);
     
+    // In development, allow localhost
+    if (process.env.NODE_ENV === 'development') {
+      return callback(null, true);
+    }
+    
+    // In production, check allowed origins
     const allowedOrigins = [
       'http://localhost:3000',
       'http://localhost:3001',
-      'https://your-app-name.vercel.app', // Update with your actual Vercel URL
-      process.env.FRONTEND_URL
+      process.env.FRONTEND_URL,
+      process.env.CORS_ORIGIN
     ].filter(Boolean);
     
     if (allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
+      // Log the blocked origin for debugging
+      console.log(`CORS blocked origin: ${origin}`);
       callback(new Error('Not allowed by CORS'));
     }
   },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
 };
 
 app.use(cors(corsOptions));
