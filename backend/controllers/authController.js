@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 
 const registerController = async (req, res) => {
   try {
-    const { email, password, role, name, organisationName, hospitalName, address, phone, website } = req.body;
+    const { email, password, role, name, organisationName, hospitalName, address, phone, website, bloodGroup, dateOfBirth } = req.body;
 
     // Validation
     if (!email || !password || !role || !address || !phone) {
@@ -54,6 +54,24 @@ const registerController = async (req, res) => {
         });
       }
       userData.name = name;
+      
+      // Additional fields for donors
+      if (role === "donor") {
+        if (!bloodGroup) {
+          return res.status(400).json({
+            success: false,
+            message: "Blood group is required for donor registration",
+          });
+        }
+        if (!dateOfBirth) {
+          return res.status(400).json({
+            success: false,
+            message: "Date of birth is required for donor registration",
+          });
+        }
+        userData.bloodGroup = bloodGroup;
+        userData.dateOfBirth = new Date(dateOfBirth);
+      }
     }
 
     if (role === "organisation") {
