@@ -67,6 +67,23 @@ cd ../client && npm install
 ```
 
 ## Running and Seeding
+
+### Option 1: Docker (Recommended for Quick Start)
+
+```bash
+docker-compose up
+```
+
+That's it! The setup automatically:
+- Starts MongoDB, Backend, and Frontend containers
+- Seeds the database with sample data (only if empty)
+- Makes everything available at:
+  - Frontend: http://localhost:3000
+  - Backend: http://localhost:8080
+  - MongoDB: localhost:27017
+
+### Option 2: Local Development
+
 Dev (runs server + client concurrently from backend):
 ```
 cd backend
@@ -90,6 +107,34 @@ Seeder: backend/seeders/seed.js
   - Donations (1–3 per donor subscription)
   - Inventory: 50 inbound (in), 30 outbound (out)
 - Password for ALL users: 1password2
+
+## Production Deployment
+
+For production, you'll deploy the **non-containerized** versions:
+
+### Backend (Node.js API)
+Deploy to: Heroku, Railway, Render, DigitalOcean, AWS EC2
+```bash
+# Set production environment
+NODE_ENV=production
+MONGO_URL=mongodb+srv://your-atlas-connection
+JWT_SECRET=your-secure-jwt-secret
+PORT=8080
+```
+
+### Frontend (React App)
+Deploy to: Netlify, Vercel, AWS S3+CloudFront
+```bash
+# Build for production
+npm run build
+# Set API URL
+REACT_APP_BASEURL=https://your-backend-api.com/api/v1
+```
+
+### Database
+Use **MongoDB Atlas** (cloud) instead of local MongoDB
+
+**Note**: Docker setup is only for local development!
 
 ## Data Model & Relationships
 Models (backend/models):

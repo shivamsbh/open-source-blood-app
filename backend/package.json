@@ -6,6 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "server": "nodemon server.js",
+    "start": "node server.js",
+    "start:dev": "node start-dev.js",
     "client": "npm start --prefix ./client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "seed": "node seeders/seed.js",
@@ -25,5 +27,8 @@
     "mongoose": "^7.1.0",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.22"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }
